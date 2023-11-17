@@ -30,6 +30,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -48,8 +52,14 @@ import com.dijonz.smartplants.ui.theme.SmartPlantsTheme
 @Composable
 fun CreateAccount() {
 
+    val serverConnect = ServerConnect()
 
-    var text = "text"
+    var nome by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var senha by remember { mutableStateOf("") }
+    var telefone by remember { mutableStateOf("") }
+    var local by remember { mutableStateOf("") }
+    var fotoUri by remember { mutableStateOf("") }
     Scaffold(
 
         modifier = Modifier.fillMaxSize(),
@@ -97,39 +107,51 @@ fun CreateAccount() {
                 )
                 OutlinedTextField(
                     modifier = Modifier.width(320.dp),
-                    value = text,
-                    onValueChange = { text = it },
+                    value = nome,
+                    onValueChange = { nome = it },
                     label = { Text("Nome") }
                 )
                 OutlinedTextField(
                     modifier = Modifier.width(320.dp),
-                    value = text,
-                    onValueChange = { text = it },
+                    value =email,
+                    onValueChange = { email = it },
                     label = { Text("E-mail") }
                 )
                 OutlinedTextField(
                     modifier = Modifier.width(320.dp),
-                    value = text,
-                    onValueChange = { text = it },
+                    value = senha,
+                    onValueChange = { senha = it },
                     label = { Text("Senha") }
                 )
                 OutlinedTextField(
                     modifier = Modifier.width(320.dp),
-                    value = text,
-                    onValueChange = { text = it },
+                    value = telefone,
+                    onValueChange = { telefone = it },
                     label = { Text("Telefone") }
                 )
                 OutlinedTextField(
                     modifier = Modifier.width(320.dp),
-                    value = text,
-                    onValueChange = { text = it },
+                    value = local,
+                    onValueChange = { local = it },
                     label = { Text("Local") }
                 )
 
                 Spacer(modifier = Modifier.height(30.dp))
 
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        if (nome.isNotBlank() &&
+                            email.isNotBlank() &&
+                            senha.isNotBlank() &&
+                            telefone.isNotBlank() &&
+                            local.isNotBlank() &&
+                            fotoUri.isNotBlank()
+                        ) {
+                            val vendedor =  Vendedor(nome, email, senha, telefone, local, fotoUri)
+                            serverConnect.enviaVendedor(vendedor)
+
+                              }
+                              },
                     modifier = Modifier.size(width = 260.dp, height = 50.dp)
                 ) {
                     Text("Continuar")
