@@ -36,10 +36,14 @@ fun Navigation() {
                 Item("Item5", "43")
             ))
         }
+        composable(route = Screen.SignUpScreen.route){
+            CreateAccount()
+        }
     }
 }
 
 sealed class Screen(val route: String) {
     object MainScreen : Screen("start_screen")
+    object SignUpScreen : Screen("signup_screen")
     object ProductsScreen : Screen("products_screen")
 }
