@@ -37,10 +37,13 @@ import com.dijonz.smartplants.ui.theme.SmartPlantsTheme
 
 val text = "text"
 
+
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProductsScreen(items: List<Item>) {
+fun ProductsScreen(
+    items: List<Item>
+    ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -145,7 +148,7 @@ fun Card(item: Item) {
 fun PreviewProducts() {
     SmartPlantsTheme {
         ProductsScreen(
-            listOf(
+            items = listOf(
                 Item("Item1", "23"),
                 Item("Item2", "43"),
                 Item("Item3", "43"),

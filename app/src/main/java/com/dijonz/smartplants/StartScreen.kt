@@ -1,6 +1,5 @@
 package com.dijonz.smartplants
 
-import androidx.compose.foundation.interaction.DragInteraction
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -24,12 +23,15 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.dijonz.smartplants.ui.theme.SmartPlantsTheme
 
 
 @Composable
-fun StartScreen(){
-
+fun StartScreen(
+    navController: NavController
+){
     val text = buildAnnotatedString {
         withStyle(style = SpanStyle(fontSize = 21.sp)){
             append("Bem-vindo ao\n\n")
@@ -56,14 +58,16 @@ fun StartScreen(){
             )
 
             Button(
-                onClick = { /*TODO*/ },
+                onClick = { navController.navigate(Screen.ProductsScreen.route) },
                 modifier = Modifier.size(width = 260.dp, height = 50.dp)){
                 Text("Visualizar Produtos")
             }
 
             Spacer(modifier = Modifier.height(15.dp))
 
-            ElevatedButton(onClick = {}, modifier = Modifier.size(width = 260.dp, height = 50.dp)){
+            ElevatedButton(onClick = {
+
+            }, modifier = Modifier.size(width = 260.dp, height = 50.dp)){
                 Text(text = "Sou um Vendedor")
             }
 
@@ -71,10 +75,11 @@ fun StartScreen(){
     }
 }
 
+
 @Preview
 @Composable
 fun PreviewStart(){
     SmartPlantsTheme {
-            StartScreen()
+            StartScreen(navController = rememberNavController())
     }
 }

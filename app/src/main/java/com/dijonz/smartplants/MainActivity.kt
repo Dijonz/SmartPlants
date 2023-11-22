@@ -3,13 +3,10 @@ package com.dijonz.smartplants
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.dijonz.smartplants.ui.theme.SmartPlantsTheme
 
 class MainActivity : ComponentActivity() {
@@ -17,30 +14,32 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             SmartPlantsTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting("Android")
-                }
+                Navigation()
             }
         }
     }
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun Navigation() {
+    val navController = rememberNavController()
+    NavHost(navController = navController, startDestination = Screen.MainScreen.route) {
+        composable(route = Screen.MainScreen.route) {
+            StartScreen(navController = navController)
+        }
+        composable(route = Screen.ProductsScreen.route) {
+            ProductsScreen(items = listOf(
+                Item("Item1", "23"),
+                Item("Item2", "43"),
+                Item("Item3", "43"),
+                Item("Item4", "43"),
+                Item("Item5", "43")
+            ))
+        }
+    }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    SmartPlantsTheme {
-        Greeting("Android")
-    }
+sealed class Screen(val route: String) {
+    object MainScreen : Screen("start_screen")
+    object ProductsScreen : Screen("products_screen")
 }
