@@ -1,6 +1,7 @@
 package com.dijonz.smartplants
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -45,6 +46,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dijonz.smartplants.ui.theme.SmartPlantsTheme
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -144,14 +149,22 @@ fun CreateAccount() {
                             email.isNotBlank() &&
                             senha.isNotBlank() &&
                             telefone.isNotBlank() &&
-                            local.isNotBlank() &&
-                            fotoUri.isNotBlank()
+                            local.isNotBlank()
                         ) {
-                            val vendedor =  Vendedor(nome, email, senha, telefone, local, fotoUri)
-                            serverConnect.enviaVendedor(vendedor)
-
-                              }
-                              },
+                            val vendedor = Vendedor(nome, email, senha, telefone, local, "enzo")
+                            // Use a coroutine to perform the network operation in the background
+                            GlobalScope.launch {
+                                try {
+                                    withContext(Dispatchers.IO) {
+                                        serverConnect.enviaVendedor(vendedor)
+                                    }
+                                } catch (e: Exception) {
+                                    // Handle the exception appropriately (e.g., show an error message)
+                                    Log.e("CreateAccount", "Error sending Vendedor: ${e.message}", e)
+                                }
+                            }
+                        }
+                    },
                     modifier = Modifier.size(width = 260.dp, height = 50.dp)
                 ) {
                     Text("Continuar")
