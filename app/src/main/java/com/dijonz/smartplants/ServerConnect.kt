@@ -38,6 +38,26 @@ class ServerConnect {
         }
     }
 
+    fun returnVendedorLogado(email: String): Vendedor? {
+        return Socket(endereco,porta).use { socket ->
+            ObjectOutputStream(socket.getOutputStream()).use { transmissor ->
+                val receberObj = ObjectInputStream(socket.getInputStream())
+                val julianoo = Mensagem(true, email, "LOGIN")
+
+                transmissor.writeObject(julianoo)
+                transmissor.flush()
+
+                try {
+                    return receberObj.readObject() as Vendedor
+                } catch (e: Exception) {
+                    println(e)
+                }
+
+                null
+            }
+        }
+    }
+
     fun returnAllVendedores(): ArrayList<Vendedor?>? {
         return Socket(endereco, porta).use { socket ->
             ObjectOutputStream(socket.getOutputStream()).use { transmissor ->
