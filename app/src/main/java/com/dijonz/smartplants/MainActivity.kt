@@ -29,7 +29,7 @@ fun Navigation() {
         }
         composable(route = Screen.ProductsScreen.route) {
             ProductsScreen(items = listOf(
-                Item("Item1", "23"),
+                Item("Item1.", "23"),
                 Item("Item2", "43"),
                 Item("Item3", "43"),
                 Item("Item4", "43"),
