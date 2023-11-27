@@ -78,7 +78,7 @@ class ServerConnect {
         }
     }
 
-    fun returnAllProdutos(): ArrayList<Vendedor?>? {
+    fun returnAllProdutos(): ArrayList<Produto?>? {
         return Socket(endereco, porta).use { socket ->
             ObjectOutputStream(socket.getOutputStream()).use { transmissor ->
                 val receberObj = ObjectInputStream(socket.getInputStream())
@@ -88,7 +88,7 @@ class ServerConnect {
                 transmissor.flush()
 
                 try {
-                    return receberObj.readObject() as ArrayList<Vendedor?>
+                    return receberObj.readObject() as ArrayList<Produto?>
                 } catch (e: Exception) {
                     println(e)
                 }
