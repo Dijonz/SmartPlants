@@ -47,7 +47,7 @@ fun StartScreen(
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.padding(bottom = 50.dp)
-            ) {
+        ) {
 
             Text(
                 text = text,
@@ -79,6 +79,6 @@ fun StartScreen(
 @Composable
 fun PreviewStart(){
     SmartPlantsTheme {
-            StartScreen(navController = rememberNavController())
+        StartScreen(navController = rememberNavController())
     }
 }
