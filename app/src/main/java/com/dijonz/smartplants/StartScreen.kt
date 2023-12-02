@@ -65,11 +65,10 @@ fun StartScreen(
             Spacer(modifier = Modifier.height(15.dp))
 
             ElevatedButton(
-                onClick = { navController.navigate(Screen.SignUpScreen.route) },
+                onClick = { navController.navigate(Screen.VendedorMain.route) },
                 modifier = Modifier.size(width = 260.dp, height = 50.dp)){
                 Text(text = "Sou um Vendedor")
             }
-
         }
     }
 }
