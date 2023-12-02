@@ -3,7 +3,6 @@ package com.dijonz.smartplants
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.net.Socket
-import java.util.ArrayList
 
 class ServerConnect {
     private val endereco = "10.0.2.2"
@@ -16,6 +15,10 @@ class ServerConnect {
                 transmissor.flush()
             }
         }
+    }
+
+    fun enviaProduto(){
+
     }
 
     fun buscarProdutosUnico(email: String): ArrayList<Vendedor?>? {

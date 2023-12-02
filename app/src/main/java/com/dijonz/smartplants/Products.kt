@@ -44,13 +44,16 @@ val text = "text"
 fun ProductsScreen(
     items: List<Item>
     ) {
+
+    val produtos = ServerConnect().returnAllProdutos()
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
                 colors = TopAppBarDefaults.smallTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.primary,
+                    titleContentColor = MaterialTheme.colorScheme.inversePrimary,
                 ),
                 title = {
                     Text("Produtos")

@@ -54,7 +54,6 @@ fun StartScreen(
                 modifier = Modifier.padding(bottom = 450.dp),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.titleSmall
-
             )
 
             Button(

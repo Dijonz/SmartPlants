@@ -1,12 +1,8 @@
 package com.dijonz.smartplants
 
 import android.annotation.SuppressLint
-import android.util.Log
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,15 +13,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.materialIcon
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -40,16 +32,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dijonz.smartplants.ui.theme.SmartPlantsTheme
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -151,20 +138,10 @@ fun CreateAccount() {
                             telefone.isNotBlank() &&
                             local.isNotBlank()
                         ) {
-                            val vendedor = Vendedor(nome, email, senha, telefone, local, "enzo")
-                            // Use a coroutine to perform the network operation in the background
-                            GlobalScope.launch {
-                                try {
-                                    withContext(Dispatchers.IO) {
-                                        serverConnect.enviaVendedor(vendedor)
-                                    }
-                                } catch (e: Exception) {
-                                    // Handle the exception appropriately (e.g., show an error message)
-                                    Log.e("CreateAccount", "Error sending Vendedor: ${e.message}", e)
-                                }
-                            }
-                        }
-                    },
+                            val vendedor =  Vendedor(nome, email, senha, telefone, local)
+                            serverConnect.enviaVendedor(vendedor)
+                              }
+                              },
                     modifier = Modifier.size(width = 260.dp, height = 50.dp)
                 ) {
                     Text("Continuar")
