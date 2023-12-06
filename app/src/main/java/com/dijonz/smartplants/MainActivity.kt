@@ -3,13 +3,21 @@ package com.dijonz.smartplants
 import android.os.Bundle
 import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.dijonz.smartplants.ui.theme.SmartPlantsTheme
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 
 class MainActivity : ComponentActivity() {
@@ -19,35 +27,61 @@ class MainActivity : ComponentActivity() {
         StrictMode.setThreadPolicy(policy)
         setContent {
             SmartPlantsTheme {
-                Navigation()
+
+                val serverConnect = ServerConnect()
+                var isLoading by remember { mutableStateOf(true) }
+                var productsList by remember { mutableStateOf(ArrayList<Produto>())}
+
+
+                LaunchedEffect(Unit) {
+                    if(isLoading){
+                        withContext(Dispatchers.IO){
+                            try {
+                                val nullableProductsList: ArrayList<Produto?>? = serverConnect.returnAllProdutos()
+
+                                productsList = ArrayList(nullableProductsList?.filterNotNull() ?: emptyList())
+                                println("$productsList")
+                            }
+                            catch(e: Exception){
+                                Log.e("MainActivity", "Erro ao buscar produtos", e)
+                            }
+                        }
+                        isLoading = false
+                    }
+                }
+                
+                if (isLoading){
+                    LoadingScreen()
+                }
+                else{
+                    Navigation(productsList)
+                }
             }
         }
     }
 }
 
+
 @Composable
-fun Navigation() {
+fun Navigation(lista: ArrayList<Produto>) {
     val navController = rememberNavController()
+
+
+
     NavHost(navController = navController, startDestination = Screen.MainScreen.route) {
         composable(route = Screen.MainScreen.route) {
             StartScreen(navController = navController)
         }
         composable(route = Screen.ProductsScreen.route) {
-            ProductsScreen(items = listOf(
-                Item("Item1.", "23"),
-                Item("Item2", "43"),
-                Item("Item3", "43"),
-                Item("Item4", "43"),
-                Item("Item5", "43")
-            ))
+            ProductsScreen(items = lista)
         }
-        composable(route = Screen.SignUpScreen.route){
-            CreateAccount()
+        composable(route = Screen.SignUpScreen.route) {
+            CreateAccount(navController = navController)
         }
-        composable(route = Screen.VendedorMain.route){
+        composable(route = Screen.VendedorMain.route) {
             VendedorMain(navController = navController)
         }
-        composable(route = Screen.NewProduct.route){
+        composable(route = Screen.NewProduct.route) {
             CreateProduct(navController = navController)
         }
     }

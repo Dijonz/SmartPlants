@@ -1,7 +1,7 @@
 package com.dijonz.smartplants
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.Image
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -16,44 +16,43 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.dijonz.smartplants.ui.theme.SmartPlantsTheme
-
-val text = "text"
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductsScreen(
-    items: List<Item>
+    items: ArrayList<Produto>
     ) {
-
-    val produtos = ServerConnect().returnAllProdutos()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
                 colors = TopAppBarDefaults.smallTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.inversePrimary,
+                    containerColor = Color(0,128,0),
+                    titleContentColor = Color.White,
                 ),
                 title = {
                     Text("Produtos")
@@ -64,7 +63,6 @@ fun ProductsScreen(
         Surface(
             modifier = Modifier.fillMaxSize()
         ) {
-
             Column(
                 verticalArrangement = Arrangement.Bottom,
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -72,7 +70,7 @@ fun ProductsScreen(
                 Surface(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(600.dp)
+                        .height(800.dp)
                         .padding(vertical = 30.dp, horizontal = 10.dp)
                 ) {
                     ProductsList(items = items)
@@ -84,10 +82,9 @@ fun ProductsScreen(
 }
 
 
-data class Item(val title: String, val price: String)
 
 @Composable
-fun ProductsList(items: List<Item>){
+fun ProductsList(items: ArrayList<Produto>){
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         content = {
@@ -101,9 +98,19 @@ fun ProductsList(items: List<Item>){
 
 
 @Composable
-fun Card(item: Item) {
-    val title = item.title
-    val price = item.price
+fun Card(item: Produto) {
+    val title = item.nome
+    val price = item.preco
+    //val file = File(item.uri)
+    //var foto: Uri? = null
+    //println(foto.toString())
+
+    var fotoUri by remember { mutableStateOf<Uri?>(Uri.parse("android.resource://com.dijonz.smartplants/"+ R.drawable.tomate_isolado)) }
+
+
+    //if(item.uri==null){
+        //foto = fotoUri
+    //}
 
     Surface(
         modifier = Modifier
@@ -121,43 +128,43 @@ fun Card(item: Item) {
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(
+            AsyncImage(
                 modifier = Modifier
                     .width(133.dp)
                     .height(133.dp),
-                painter = painterResource(id = R.drawable.tomate_isolado),
+                model = fotoUri,
                 contentDescription = null,
                 contentScale = ContentScale.Crop
             )
-            Text(
-                text = title,
-                style = TextStyle(
-                    fontSize = 14.sp,
-                    lineHeight = 18.sp,
-                    fontWeight = FontWeight(700),
-                    color = Color(0xFF223263),
-                    letterSpacing = 0.5.sp,
+            Column(
+                horizontalAlignment = Alignment.Start
+            ) {
+                Text(
+                    text ="R$:"+price+"/Kg",
+                    fontSize = 21.sp
                 )
-            )
-            Text(
-                text = price
-            )
+                Text(
+                    text = title,
+                    style = TextStyle(
+                        fontSize = 14.sp,
+                        lineHeight = 18.sp,
+                        fontWeight = FontWeight(700),
+                        color = Color(0xFF223263),
+                        letterSpacing = 0.5.sp,
+                    )
+                )
+            }
         }
     }
 }
+
 
 @Preview
 @Composable
 fun PreviewProducts() {
     SmartPlantsTheme {
         ProductsScreen(
-            items = listOf(
-                Item("Item1", "23"),
-                Item("Item2", "43"),
-                Item("Item3", "43"),
-                Item("Item4", "43"),
-                Item("Item5", "43")
-            )
+            items = ArrayList<Produto>()
         )
     }
 }

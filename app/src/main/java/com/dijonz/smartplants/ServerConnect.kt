@@ -17,10 +17,6 @@ class ServerConnect {
         }
     }
 
-    fun enviaProduto(){
-
-    }
-
     fun buscarProdutosUnico(email: String): ArrayList<Vendedor?>? {
         return Socket(endereco, porta).use { socket ->
             ObjectOutputStream(socket.getOutputStream()).use { transmissor ->
@@ -79,6 +75,16 @@ class ServerConnect {
                 null
             }
         }
+    }
+
+    fun enviaProduto(produto: Produto){
+        Socket(endereco, porta).use { socket ->
+            ObjectOutputStream(socket.getOutputStream()).use { transmissor ->
+                transmissor.writeObject(produto)
+                transmissor.flush()
+            }
+        }
+
     }
 
     fun returnAllProdutos(): ArrayList<Produto?>? {

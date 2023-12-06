@@ -1,5 +1,7 @@
 package com.dijonz.smartplants;
 
+
+
 import java.io.Serializable;
 
 public class Vendedor implements Serializable,Cloneable {
@@ -9,16 +11,15 @@ public class Vendedor implements Serializable,Cloneable {
     private final String senha;
     private final String telefone;
     private final String local;
+    private final String fotoUri;
 
-    //private final String fotoUri;
-
-    public Vendedor(String nome, String email, String senha, String telefone, String local) {
+    public Vendedor(String nome, String email, String senha, String telefone, String local, String fotoUri) {
         this.nome = nome;
         this.email = email;
         this.senha = senha;
         this.telefone = telefone;
         this.local = local;
-        //this.fotoUri = fotoUri;
+        this.fotoUri = fotoUri;
     }
 
 
@@ -30,8 +31,8 @@ public class Vendedor implements Serializable,Cloneable {
                 ", email='" + email + '\'' +
                 ", senha='" + senha + '\'' +
                 ", telefone='" + telefone + '\'' +
-                ", local='" + local + '\'' /*+
-                ", fotoUri='" + fotoUri + '\''*/ +
+                ", local='" + local + '\'' +
+                ", fotoUri='" + fotoUri + '\'' +
                 '}';
     }
 
@@ -39,7 +40,7 @@ public class Vendedor implements Serializable,Cloneable {
         Vendedor copia = (Vendedor) obj;
         this.nome = copia.getNome();
         this.email= copia.getEmail();
-        //this.fotoUri=copia.getFotoUri();
+        this.fotoUri=copia.getFotoUri();
         this.local = copia.getLocal();
         this.senha = copia.getSenha();
         this.telefone = copia.getTelefone();
@@ -49,9 +50,9 @@ public class Vendedor implements Serializable,Cloneable {
         return email;
     }
 
-    /*public String getFotoUri() {
+    public String getFotoUri() {
         return fotoUri;
-    }*/
+    }
 
     public String getLocal() {
         return local;
@@ -74,6 +75,7 @@ public class Vendedor implements Serializable,Cloneable {
         return new Vendedor(this);
     }
 }
+
 
 
 

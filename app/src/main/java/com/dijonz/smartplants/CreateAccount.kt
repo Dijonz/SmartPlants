@@ -1,7 +1,11 @@
 package com.dijonz.smartplants
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.Image
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -31,18 +35,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import com.dijonz.smartplants.ui.theme.SmartPlantsTheme
-
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
-fun CreateAccount() {
+fun CreateAccount(navController: NavController) {
+
 
     val serverConnect = ServerConnect()
 
@@ -51,9 +58,14 @@ fun CreateAccount() {
     var senha by remember { mutableStateOf("") }
     var telefone by remember { mutableStateOf("") }
     var local by remember { mutableStateOf("") }
-    var fotoUri by remember { mutableStateOf("") }
-    Scaffold(
+    var fotoUri by remember { mutableStateOf<Uri?>(Uri.parse("android.resource://com.dijonz.smartplants/"+ R.drawable._60_f_215844325_ttx9yiiiyear7ne6ealljmamy4gvpc69)) }
 
+
+    val singlePhotoPicker = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = { fotoUri = it })
+
+    Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             CenterAlignedTopAppBar(
@@ -78,6 +90,8 @@ fun CreateAccount() {
         Surface(
             modifier = Modifier.fillMaxSize()
         ) {
+
+
             Column(
                 modifier = Modifier.padding(innerPadding),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -90,10 +104,18 @@ fun CreateAccount() {
                         .width(300.dp)
                         .padding(top = 30.dp)
                 )
-                Image(
+                AsyncImage(
                     modifier = Modifier
-                        .clip(CircleShape),
-                    painter = painterResource(R.drawable._60_f_215844325_ttx9yiiiyear7ne6ealljmamy4gvpc69),
+                        .clip(CircleShape)
+                        .size(150.dp)
+                        .clickable {
+                            singlePhotoPicker.launch(
+                                PickVisualMediaRequest(
+                                    ActivityResultContracts.PickVisualMedia.ImageOnly
+                                )
+                            )
+                        },
+                    model = fotoUri,
                     contentDescription = "Clique para adicionar uma foto",
                     contentScale = ContentScale.Crop
                 )
@@ -105,7 +127,7 @@ fun CreateAccount() {
                 )
                 OutlinedTextField(
                     modifier = Modifier.width(320.dp),
-                    value =email,
+                    value = email,
                     onValueChange = { email = it },
                     label = { Text("E-mail") }
                 )
@@ -138,10 +160,12 @@ fun CreateAccount() {
                             telefone.isNotBlank() &&
                             local.isNotBlank()
                         ) {
-                            val vendedor =  Vendedor(nome, email, senha, telefone, local)
+                            val uriString = fotoUri.toString()
+                            val vendedor = Vendedor(nome, email, senha, telefone, local, uriString)
                             serverConnect.enviaVendedor(vendedor)
-                              }
-                              },
+                            navController.navigate(Screen.VendedorMain.route)
+                        }
+                    },
                     modifier = Modifier.size(width = 260.dp, height = 50.dp)
                 ) {
                     Text("Continuar")
@@ -155,6 +179,6 @@ fun CreateAccount() {
 @Composable
 fun PreviewCreateAccount() {
     SmartPlantsTheme {
-        CreateAccount()
+        CreateAccount(rememberNavController())
     }
 }
